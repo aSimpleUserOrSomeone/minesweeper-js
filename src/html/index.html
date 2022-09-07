@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../js/app.js" defer></script>
+    <title>Document</title>
+</head>
+<body>
+    <form id="inpForm" onsubmit="event.preventDefault()">
+        <div class="form-row">
+            <label for="inpWidth">Width:</label>
+            <input type="number" name="width" id="inpWidth">
+        </div>
+        <div class="form-row">
+            <label for="inpHeight">Height:</label>
+            <input type="number" name="height" id="inpHeight">
+        </div>
+        <div class="form-row">
+            <label for="inpMines">Mines:</label>
+            <input type="number" name="mines" id="inpMines">
+        </div>
+        <div class="form-row">
+            <button id="btnCreate">Create</button>
+        </div>
+    </form>
+
+    <div class="minesweeper-frame">
+        <div class="minesweeper-field">
+        </div>
+    </div>
+    
+</body>
+</html>
