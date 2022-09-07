@@ -4,8 +4,8 @@ const inpMines = document.querySelector("#inpMines")
 const btnCreate = document.querySelector("#btnCreate")
 const inpForm = document.querySelector("#inpForm")
 
-const mineFrame = document.querySelector(".minesweeperFrame")
-const mineField = document.querySelector(".minesweeperField")
+const mineFrame = document.querySelector(".minesweeper-frame")
+const mineField = document.querySelector(".minesweeper-field")
 
 const getFromForm = () => {
     const minesWidth = inpWidth.value
@@ -53,19 +53,53 @@ const createMinefield = () => {
         }
         
         //project the array as html elements
-        arrMinefield.map((arrayRow) => {
+        
+        for (let i = 0; i < arrMinefield.length; i++) {
             const minesweeperRow = document.createElement("div")
             minesweeperRow.classList.add("minesweeper-row")
-            arrayRow.map((arrayCell) => {
+
+            for (let j = 0; j < arrMinefield[i].length; j++) {
                 const minesweeperCell = document.createElement("div")
                 minesweeperCell.classList.add("tile")
                 minesweeperCell.classList.add("hidden")
                 
+                //check for near 
+                if(arrMinefield[i][j] == 0) {
+                    var nearbyMines = 0;
+                    for(let k = -1; i < 2; k++) {
+                        for(let l = -1; j < 2; l++) {
+                            
+                        }
+                        
+                    }
+                }
+            }
+        }
+        
+        // arrMinefield.map((arrayRow) => {
+        //     const minesweeperRow = document.createElement("div")
+        //     minesweeperRow.classList.add("minesweeper-row")
+        //     arrayRow.map((arrayCell) => {
+        //         const minesweeperCell = document.createElement("div")
+        //         minesweeperCell.classList.add("tile")
+        //         minesweeperCell.classList.add("hidden")
+                
+        //         //check for near 
+        //         if(arrayCell == 0) {
+        //             var nearbyMines = 0;
+        //             for(let i = -1; i < 2; i++) {
+        //                 for(let j = -1; j < 2; j++) {
+                            
+        //                 }
+                        
+        //             }
+                    
+        //         }
 
-                minesweeperRow.appendChild(minesweeperCell)
-            })
-            mineField.appendChild(minesweeperRow)
-        })
+        //         minesweeperRow.appendChild(minesweeperCell)
+        //     })
+        //     mineField.appendChild(minesweeperRow)
+        // })
 
     }
 }
