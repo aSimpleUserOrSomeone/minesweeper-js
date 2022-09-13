@@ -1,99 +1,107 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-
 .minesweeper-frame {
-    min-width: 200px;
-    min-height: 200px;
+	min-width: 200px;
+	min-height: 200px;
 
-    width: min-content;
-    height: min-content;
+	width: min-content;
+	height: min-content;
 
-    border: solid black 2px;
+	border: solid black 2px;
 }
 
 .minesweeper-field {
-    margin: 5px;
-    min-width: 200px;
-    min-height: 200px;
+	margin: 5px;
+	min-width: 200px;
+	min-height: 200px;
 
-    width: min-content;
-    height: min-content;
+	width: min-content;
+	height: min-content;
 
-    border: solid black 2px;
+	border: solid black 2px;
+
+	display: flex;
+	flex-direction: column;
 }
 
 .minesweeper-row {
-
+	display: flex;
+	flex-direction: row;
 }
 
 /* Mine tiles styles */
 
 .tile {
-    width: 22px;
-    height: 22px;
-    border-width: 2px;
-    border-style: groove;
+	width: 22px;
+	height: 22px;
+	border-width: 2px;
+	border-style: groove;
+
+	/*hides text*/
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .hidden {
-    border-color: grey;
-    background-color: #DDD;
-    color: transparent;
+	border-color: grey;
+	background-color: #ddd;
+	color: transparent;
 }
 
 .flag {
-    border-color: grey;
-    background-color: #DDD;
+	border-color: grey;
+	background-color: #ddd;
 }
 
 .mine {
-    border-color: grey;
-    background-color: #DDD;
+	border-color: grey;
+	background-color: #ddd;
 }
 
 .blank {
-    border-width: 1px;
-    border-color: grey;
-    background-color: #AAA;
+	border-width: 1px;
+	border-color: grey;
+	background-color: #aaa;
 }
 
 .shown {
-    border-color: grey;
-    background-color: #DDD;
+	border-color: grey;
+	background-color: #ddd;
 }
 
 .n1 {
-    color: blue;
+	color: blue;
 }
 
 .n2 {
-    color: green;
+	color: green;
 }
 
 .n3 {
-    color: red;
+	color: red;
 }
 
 .n4 {
-    color: purple;
+	color: purple;
 }
 
 .n5 {
-    color: maroon;
+	color: maroon;
 }
 
 .n6 {
-    color: turquoise;
+	color: turquoise;
 }
 
 .n7 {
-    color: black;
+	color: black;
 }
 
 .n8 {
-    color: darkgray;
+	color: darkgray;
 }
