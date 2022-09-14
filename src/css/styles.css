@@ -5,19 +5,22 @@
 }
 
 .minesweeper-frame {
-	min-width: 200px;
-	min-height: 200px;
+	min-width: 150px;
+	min-height: 150px;
 
 	width: min-content;
 	height: min-content;
-
 	border: solid black 2px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .minesweeper-field {
 	margin: 5px;
-	min-width: 200px;
-	min-height: 200px;
+	min-width: 100px;
+	min-height: 100px;
 
 	width: min-content;
 	height: min-content;
@@ -40,6 +43,11 @@
 	height: 22px;
 	border-width: 2px;
 	border-style: groove;
+	user-select: none;
+	text-align: center;
+	line-height: 18px;
+	font-size: 19px;
+	font-weight: bold;
 
 	/*hides text*/
 	text-indent: 100%;
@@ -49,22 +57,16 @@
 
 .hidden {
 	border-color: grey;
-	background-color: #ddd;
+	background-color: #aaa;
 	color: transparent;
 }
 
 .flag {
 	border-color: grey;
-	background-color: #ddd;
+	background-color: #aaa;
 }
 
 .mine {
-	border-color: grey;
-	background-color: #ddd;
-}
-
-.blank {
-	border-width: 1px;
 	border-color: grey;
 	background-color: #aaa;
 }
@@ -74,34 +76,70 @@
 	background-color: #ddd;
 }
 
+.n0 {
+	border-width: 1px;
+}
+
 .n1 {
 	color: blue;
+
+	text-indent: initial;
+	white-space: initial;
+	overflow: initial;
 }
 
 .n2 {
 	color: green;
+
+	text-indent: initial;
+	white-space: initial;
+	overflow: initial;
 }
 
 .n3 {
 	color: red;
+
+	text-indent: initial;
+	white-space: initial;
+	overflow: initial;
 }
 
 .n4 {
 	color: purple;
+
+	text-indent: initial;
+	white-space: initial;
+	overflow: initial;
 }
 
 .n5 {
 	color: maroon;
+
+	text-indent: initial;
+	white-space: initial;
+	overflow: initial;
 }
 
 .n6 {
 	color: turquoise;
+
+	text-indent: initial;
+	white-space: initial;
+	overflow: initial;
 }
 
 .n7 {
 	color: black;
+
+	text-indent: initial;
+	white-space: initial;
+	overflow: initial;
 }
 
 .n8 {
 	color: darkgray;
+
+	text-indent: initial;
+	white-space: initial;
+	overflow: initial;
 }
