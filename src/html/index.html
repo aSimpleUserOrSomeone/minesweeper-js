@@ -6,21 +6,21 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="../css/styles.css" />
 		<script src="../js/app.js" defer></script>
-		<title>Document</title>
+		<title>Minesweeper</title>
 	</head>
 	<body>
 		<form id="inpForm" onsubmit="event.preventDefault()">
 			<div class="form-row">
 				<label for="inpWidth">Width:</label>
-				<input type="number" name="width" id="inpWidth" value="10" />
+				<input type="number" name="width" id="inpWidth" value="6" />
 			</div>
 			<div class="form-row">
 				<label for="inpHeight">Height:</label>
-				<input type="number" name="height" id="inpHeight" value="10" />
+				<input type="number" name="height" id="inpHeight" value="6" />
 			</div>
 			<div class="form-row">
 				<label for="inpMines">Mines:</label>
-				<input type="number" name="mines" id="inpMines" value="8" />
+				<input type="number" name="mines" id="inpMines" value="4" />
 			</div>
 			<div class="form-row">
 				<button id="btnCreate">Create</button>
@@ -28,6 +28,7 @@
 		</form>
 
 		<div class="minesweeper-frame">
+			<div class="lose-screen"></div>
 			<div class="minesweeper-field"></div>
 		</div>
 	</body>

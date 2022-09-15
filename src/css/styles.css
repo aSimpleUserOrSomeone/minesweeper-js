@@ -66,21 +66,27 @@
 	background-color: #aaa;
 }
 
-.mine {
+.shown.mine {
 	border-color: grey;
 	background-color: #aaa;
 }
 
+.red.mine {
+	border-color: rgb(121, 52, 52);
+	background-color: rgb(255, 100, 100);
+}
+
 .shown {
+	pointer-events: none;
 	border-color: grey;
 	background-color: #ddd;
 }
 
-.n0 {
+.n0.shown {
 	border-width: 1px;
 }
 
-.n1 {
+.n1.shown {
 	color: blue;
 
 	text-indent: initial;
@@ -88,7 +94,7 @@
 	overflow: initial;
 }
 
-.n2 {
+.n2.shown {
 	color: green;
 
 	text-indent: initial;
@@ -96,7 +102,7 @@
 	overflow: initial;
 }
 
-.n3 {
+.n3.shown {
 	color: red;
 
 	text-indent: initial;
@@ -104,7 +110,7 @@
 	overflow: initial;
 }
 
-.n4 {
+.n4.shown {
 	color: purple;
 
 	text-indent: initial;
@@ -112,7 +118,7 @@
 	overflow: initial;
 }
 
-.n5 {
+.n5.shown {
 	color: maroon;
 
 	text-indent: initial;
@@ -120,7 +126,7 @@
 	overflow: initial;
 }
 
-.n6 {
+.n6.shown {
 	color: turquoise;
 
 	text-indent: initial;
@@ -128,7 +134,7 @@
 	overflow: initial;
 }
 
-.n7 {
+.n7.shown {
 	color: black;
 
 	text-indent: initial;
@@ -136,7 +142,7 @@
 	overflow: initial;
 }
 
-.n8 {
+.n8.shown {
 	color: darkgray;
 
 	text-indent: initial;
