@@ -4,31 +4,70 @@
 	box-sizing: border-box;
 }
 
-.minesweeper-frame {
-	min-width: 150px;
-	min-height: 150px;
-
-	width: min-content;
-	height: min-content;
-	border: solid black 2px;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
+#inpForm {
 }
 
-.minesweeper-field {
-	margin: 5px;
-	min-width: 100px;
-	min-height: 100px;
+.form-row {
+}
+
+.form-row label {
+}
+
+.form-row input {
+}
+
+.minesweeper-frame {
+	min-width: 150px;
+	padding: 5px;
 
 	width: min-content;
 	height: min-content;
-
 	border: solid black 2px;
 
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	gap: 5px;
+
+	background-color: #ccc;
+}
+
+.minesweeper-field {
+	display: none;
+
+	width: min-content;
+	height: min-content;
+
+	border: solid black 2px;
+
+	flex-direction: column;
+
+	background-color: #999;
+}
+
+.stats {
+	width: max-content;
+
+	display: flex;
+	justify-content: space-between;
+}
+
+.time-img {
+	width: 25px;
+	aspect-ratio: 1;
+}
+
+.time-counter {
+	line-height: 25px;
+	font-size: 25px;
+	margin: 0 2px;
+}
+
+.lose-screen {
+	position: absolute;
+	background-color: black;
+	opacity: 0;
 }
 
 .minesweeper-row {

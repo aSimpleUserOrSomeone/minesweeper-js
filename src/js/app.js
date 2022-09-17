@@ -6,9 +6,34 @@ const inpForm = document.querySelector('#inpForm')
 
 const mineFrame = document.querySelector('.minesweeper-frame')
 const mineField = document.querySelector('.minesweeper-field')
+const loseScreen = document.querySelector('.lose-screen')
+const timeP = document.querySelector('.time-counter')
 
+var interval = null
+var isTicking = false
+var time = 0
 var leftoverMines = 0
 var arrMinefield = []
+
+const startTimer = () => {
+	if (isTicking) return
+	isTicking = true
+	interval = setInterval(() => {
+		time++
+		if (time > 99) {
+			timeP.textContent = time
+		} else if (time > 9) {
+			timeP.textContent = '0' + time
+		} else {
+			timeP.textContent = '00' + time
+		}
+	}, 1000)
+}
+
+const stopTimer = () => {
+	if (interval !== null) clearInterval(interval)
+	isTicking = false
+}
 
 const getFromForm = () => {
 	const minesWidth = inpWidth.value
@@ -16,21 +41,37 @@ const getFromForm = () => {
 	const minesCount = inpMines.value
 
 	if (minesWidth != '' && minesHeight != '' && minesCount != '') {
-		if (minesCount <= (minesHeight - 1) * (minesWidth - 1)) {
-			const results = {
-				width: minesWidth,
-				height: minesHeight,
-				minesCount,
+		if (minesCount > 0) {
+			if (minesCount <= (minesHeight - 1) * (minesWidth - 1)) {
+				const results = {
+					width: minesWidth,
+					height: minesHeight,
+					minesCount,
+				}
+				return results
+			} else {
+				console.log('To many mines')
+				return null
 			}
-			return results
 		} else {
-			console.log('To many mines')
+			console.log('Not enough mines')
 			return null
 		}
 	}
 }
 
 const createMinefield = () => {
+	//will hide lose screen(filter)
+	hideLoseScreen()
+
+	//will reset timer
+	time = 0
+	stopTimer()
+	timeP.textContent = '000'
+
+	//show minefield
+	mineField.style.display = 'flex'
+
 	//get form data
 	const formData = getFromForm()
 	if (formData == null) return
@@ -87,6 +128,8 @@ const createMinefield = () => {
 const fillMinefield = (minesweeperCell) => {
 	//fill with mines
 	while (leftoverMines > 0) {
+		//will start timer on first click
+		startTimer()
 		const x = Math.floor(Math.random() * arrMinefield[0].length)
 		const y = Math.floor(Math.random() * arrMinefield.length)
 
@@ -166,7 +209,15 @@ const showTile = (x, y) => {
 	tile.classList.remove('hidden')
 }
 
-const displayLoseScreen = () => {}
+const displayLoseScreen = () => {
+	loseScreen.style.display = 'block'
+	loseScreen.style.width = '100%'
+	loseScreen.style.height = '100%'
+}
+
+const hideLoseScreen = () => {
+	loseScreen.style.display = 'none'
+}
 
 const mineClicked = (x, y) => {
 	document
@@ -179,13 +230,13 @@ const mineClicked = (x, y) => {
 
 	const mines = document.querySelectorAll('.mine')
 	mines.forEach((e) => {
-		console.log(e)
 		const x = e.value[0]
 		const y = e.value[1]
 		showTile(x, y)
 	})
 
 	displayLoseScreen()
+	stopTimer()
 }
 
 const openTile = (x, y) => {
@@ -248,66 +299,5 @@ const openTiles = (cellValue) => {
 	}
 }
 
-//currently unused
-// const uncoverTile = (minesweeperCell) => {
-// 	const currX = minesweeperCell.value[0]
-// 	const currY = minesweeperCell.value[1]
-
-// 	if (arrMinefield[currY][currX] === 1) {
-// 		return
-// 	}
-
-// 	var nearbyMines = 0
-// 	var startX = -1
-// 	var maxX = 1
-// 	var startY = -1
-// 	var maxY = 1
-
-// 	if (currX === 0) {
-// 		startX = 0
-// 	} else if (currX === arrMinefield[currX].length - 1) {
-// 		maxX = 0
-// 	}
-
-// 	if (currY === 0) {
-// 		startY = 0
-// 	} else if (currY === arrMinefield.length - 1) {
-// 		maxY = 0
-// 	}
-
-// 	for (let i = startY; i <= maxY; i++) {
-// 		for (let j = startX; j <= maxX; j++) {
-// 			if (j === 0 && i === 0) continue
-
-// 			if (arrMinefield[currY + i][currX + j] === 1) {
-// 				nearbyMines++
-// 			}
-// 		}
-// 	}
-// 	minesweeperCell.textContent = nearbyMines
-// 	minesweeperCell.classList.add('shown')
-// 	minesweeperCell.classList.remove('hidden')
-
-// 	//czy dany kafelek graniczy z minami
-// 	if (nearbyMines) {
-// 		minesweeperCell.classList.add(`n${nearbyMines}`)
-// 	} else {
-// 		minesweeperCell.classList.add('blank')
-// 		for (let i = startY; i <= maxY; i++) {
-// 			for (let j = startX; j <= maxX; j++) {
-// 				if (j === 0 && i === 0) continue
-
-// 				const borderingCell = document.querySelector(
-// 					`.minesweeper-field > div:nth-child(${
-// 						currY + i + 1
-// 					}) > div:nth-child(${currX + j + 1})`
-// 				)
-// 				if (borderingCell.classList.contains('hidden')) {
-// 					borderingCell.click()
-// 				}
-// 			}
-// 		}
-// 	}
-// }
-
+// loseScreen.style.display = 'none'
 btnCreate.addEventListener('click', createMinefield)
