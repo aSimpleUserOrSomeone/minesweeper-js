@@ -66,9 +66,9 @@
 	background-color: #aaa;
 }
 
-.shown.mine {
-	border-color: grey;
-	background-color: #aaa;
+.mine.shown {
+	background-image: url(../img/mine.png);
+	background-size: contain;
 }
 
 .red.mine {

@@ -87,7 +87,6 @@ const createMinefield = () => {
 const fillMinefield = (minesweeperCell) => {
 	//fill with mines
 	while (leftoverMines > 0) {
-		console.log('Iter')
 		const x = Math.floor(Math.random() * arrMinefield[0].length)
 		const y = Math.floor(Math.random() * arrMinefield.length)
 
@@ -102,13 +101,21 @@ const fillMinefield = (minesweeperCell) => {
 	//fill with numbers
 	arrMinefield.forEach((arrayRow, rowIndex) => {
 		arrayRow.forEach((arrayCell, cellIndex) => {
+			const x = cellIndex
+			const y = rowIndex
+
+			//give mine class
 			if (arrayCell[0] === 9) {
-				return
+				return document
+					.querySelector(
+						`.minesweeper-field > div:nth-child(${
+							y + 1
+						}) > div:nth-child(${x + 1})`
+					)
+					.classList.add('mine')
 			}
 
 			var nearbyMines = 0
-			const x = cellIndex
-			const y = rowIndex
 
 			var startX = -1
 			var maxX = 1
@@ -141,8 +148,6 @@ const fillMinefield = (minesweeperCell) => {
 			giveTileNumber(x, y, nearbyMines)
 		})
 	})
-
-	console.log(arrMinefield)
 }
 
 const giveTileNumber = (x, y, n) => {
@@ -161,13 +166,29 @@ const showTile = (x, y) => {
 	tile.classList.remove('hidden')
 }
 
-const mineClicked = (x, y) => {}
+const displayLoseScreen = () => {}
+
+const mineClicked = (x, y) => {
+	document
+		.querySelector(
+			`.minesweeper-field > div:nth-child(${y + 1}) > div:nth-child(${
+				x + 1
+			})`
+		)
+		.classList.add('red')
+
+	const mines = document.querySelectorAll('.mine')
+	mines.forEach((e) => {
+		console.log(e)
+		const x = e.value[0]
+		const y = e.value[1]
+		showTile(x, y)
+	})
+
+	displayLoseScreen()
+}
 
 const openTile = (x, y) => {
-	if (arrMinefield[y][x][0] === 9) {
-		return mineClicked(x, y)
-	}
-
 	var toOpen = []
 
 	var startX = -1
@@ -201,8 +222,13 @@ const openTile = (x, y) => {
 }
 
 const openTiles = (cellValue) => {
+	//check if mine clicked
+	if (arrMinefield[cellValue[1]][cellValue[0]][0] === 9) {
+		mineClicked(cellValue[0], cellValue[1])
+		return
+	}
+
 	const toBeUncovered = [cellValue]
-	console.log('click')
 
 	while (toBeUncovered.length) {
 		let nextTile = toBeUncovered.pop()
