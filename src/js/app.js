@@ -6,9 +6,14 @@ const inpForm = document.querySelector('#inpForm')
 
 const mineFrame = document.querySelector('.minesweeper-frame')
 const mineField = document.querySelector('.minesweeper-field')
-const loseScreen = document.querySelector('.lose-screen')
+const stopScreen = document.querySelector('.stop-screen')
 const timeP = document.querySelector('.time-counter')
 
+const inpName = document.querySelector('#inpName')
+const scoreboardDiv = document.querySelector('.soreboard')
+const scoreboard = document.querySelector('.sores-list')
+
+var hasWon = false
 var interval = null
 var isTicking = false
 var time = 0
@@ -62,7 +67,7 @@ const getFromForm = () => {
 
 const createMinefield = () => {
 	//will hide lose screen(filter)
-	hideLoseScreen()
+	hideStopScreen()
 
 	//will reset timer
 	time = 0
@@ -78,9 +83,7 @@ const createMinefield = () => {
 
 	//reset playing field
 	if (document.querySelectorAll('.minesweeper-field > *')) {
-		document
-			.querySelectorAll('.minesweeper-field > *')
-			.forEach((el) => el.remove())
+		document.querySelectorAll('.minesweeper-field > *').forEach((el) => el.remove())
 	}
 
 	leftoverMines = formData.minesCount
@@ -109,12 +112,6 @@ const createMinefield = () => {
 				'click',
 				() => {
 					fillMinefield(minesweeperCell)
-				},
-				{ once: true }
-			)
-			minesweeperCell.addEventListener(
-				'click',
-				() => {
 					openTiles(minesweeperCell.value)
 				},
 				{ once: true }
@@ -150,11 +147,7 @@ const fillMinefield = (minesweeperCell) => {
 			//give mine class
 			if (arrayCell[0] === 9) {
 				return document
-					.querySelector(
-						`.minesweeper-field > div:nth-child(${
-							y + 1
-						}) > div:nth-child(${x + 1})`
-					)
+					.querySelector(`.minesweeper-field > div:nth-child(${y + 1}) > div:nth-child(${x + 1})`)
 					.classList.add('mine')
 			}
 
@@ -194,39 +187,29 @@ const fillMinefield = (minesweeperCell) => {
 }
 
 const giveTileNumber = (x, y, n) => {
-	tile = document.querySelector(
-		`.minesweeper-field > div:nth-child(${y + 1}) > div:nth-child(${x + 1})`
-	)
+	tile = document.querySelector(`.minesweeper-field > div:nth-child(${y + 1}) > div:nth-child(${x + 1})`)
 	tile.textContent = n
 	tile.classList.add(`n${n}`)
 }
 
 const showTile = (x, y) => {
-	tile = document.querySelector(
-		`.minesweeper-field > div:nth-child(${y + 1}) > div:nth-child(${x + 1})`
-	)
+	tile = document.querySelector(`.minesweeper-field > div:nth-child(${y + 1}) > div:nth-child(${x + 1})`)
 	tile.classList.add('shown')
 	tile.classList.remove('hidden')
 }
 
-const displayLoseScreen = () => {
-	loseScreen.style.display = 'block'
-	loseScreen.style.width = '100%'
-	loseScreen.style.height = '100%'
+const displayStopScreen = () => {
+	stopScreen.style.display = 'block'
+	stopScreen.style.width = '100%'
+	stopScreen.style.height = '100%'
 }
 
-const hideLoseScreen = () => {
-	loseScreen.style.display = 'none'
+const hideStopScreen = () => {
+	stopScreen.style.display = 'none'
 }
 
 const mineClicked = (x, y) => {
-	document
-		.querySelector(
-			`.minesweeper-field > div:nth-child(${y + 1}) > div:nth-child(${
-				x + 1
-			})`
-		)
-		.classList.add('red')
+	document.querySelector(`.minesweeper-field > div:nth-child(${y + 1}) > div:nth-child(${x + 1})`).classList.add('red')
 
 	const mines = document.querySelectorAll('.mine')
 	mines.forEach((e) => {
@@ -235,7 +218,26 @@ const mineClicked = (x, y) => {
 		showTile(x, y)
 	})
 
-	displayLoseScreen()
+	displayStopScreen()
+	stopTimer()
+}
+
+const checkForWin = () => {
+	var allGood = true
+	arrMinefield.forEach((row) => {
+		row.forEach((cell) => {
+			//check if non-mine cell is still hidden
+			if (cell[1] === 0 && cell[0] !== 9) {
+				allGood = false
+			}
+		})
+	})
+
+	//will go on if every non-mine cell is uncovered (meaning win)
+	if (!allGood) return
+
+	console.log('Win!')
+	displayStopScreen()
 	stopTimer()
 }
 
@@ -297,7 +299,37 @@ const openTiles = (cellValue) => {
 			}
 		}
 	}
+
+	//check if all tiles are uncovered
+	checkForWin()
 }
 
-// loseScreen.style.display = 'none'
+const removeCookie = (id) => {
+	getCookies()
+	const delDate = new Date()
+
+	document.cookie = `${id}=${null}; ${delDate.getTime()}`
+}
+
+const setCookie = (imie, czas) => {
+	const date = new Date()
+	date.setTime(date.getTime + 24 * 1000000)
+	if (imie == '') imie = 'Anon'
+
+	const cArray = getCookies()
+	const cData = [imie, czas]
+
+	document.cookie = `${cArray.length + 1}=${cData}; 2022; path='/'`
+}
+
+const getCookies = () => {
+	const cDecoded = decodeURIComponent(document.cookie)
+	const cArray = cDecoded.split('; ')
+
+	console.log(cArray)
+	return cArray
+}
+
+removeCookie(2)
+
 btnCreate.addEventListener('click', createMinefield)

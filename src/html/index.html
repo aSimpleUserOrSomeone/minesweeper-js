@@ -9,31 +9,42 @@
 		<title>Minesweeper</title>
 	</head>
 	<body>
-		<form id="inpForm" onsubmit="event.preventDefault()">
-			<div class="form-row">
-				<label for="inpWidth">Width:</label>
-				<input type="number" name="width" id="inpWidth" value="7" />
-			</div>
-			<div class="form-row">
-				<label for="inpHeight">Height:</label>
-				<input type="number" name="height" id="inpHeight" value="7" />
-			</div>
-			<div class="form-row">
-				<label for="inpMines">Mines:</label>
-				<input type="number" name="mines" id="inpMines" value="4" />
-			</div>
-			<div class="form-row">
-				<button id="btnCreate">Start</button>
-			</div>
-		</form>
+		<main>
+			<form id="inpForm" onsubmit="event.preventDefault()">
+				<div class="form-row">
+					<label for="inpWidth">Width:</label>
+					<input type="number" name="width" id="inpWidth" value="7" />
+				</div>
+				<div class="form-row">
+					<label for="inpHeight">Height:</label>
+					<input type="number" name="height" id="inpHeight" value="7" />
+				</div>
+				<div class="form-row">
+					<label for="inpMines">Mines:</label>
+					<input type="number" name="mines" id="inpMines" value="4" />
+				</div>
+				<div class="form-row">
+					<label for="inpName">Name:</label>
+					<input type="text" name="name" id="inpName" placeholder="Spongebob" />
+				</div>
+				<div class="form-row">
+					<button id="btnCreate">Start</button>
+				</div>
+			</form>
 
-		<div class="minesweeper-frame">
-			<div class="stats">
-				<img src="../img/clock.png" alt="clock-img" class="time-img" />
-				<p class="time-counter">000</p>
+			<div class="minesweeper-frame">
+				<div class="stats">
+					<img src="../img/clock.png" alt="clock-img" class="time-img" />
+					<p class="time-counter">000</p>
+				</div>
+				<div class="minesweeper-field"></div>
+				<div class="stop-screen"></div>
 			</div>
-			<div class="minesweeper-field"></div>
-			<div class="lose-screen"></div>
-		</div>
+
+			<div class="scoreboard">
+				<h2>Best scores:</h2>
+				<ul class="scores-list"></ul>
+			</div>
+		</main>
 	</body>
 </html>
