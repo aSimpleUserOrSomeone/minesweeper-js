@@ -10,8 +10,8 @@ const stopScreen = document.querySelector('.stop-screen')
 const timeP = document.querySelector('.time-counter')
 
 const inpName = document.querySelector('#inpName')
-const scoreboardDiv = document.querySelector('.soreboard')
-const scoreboard = document.querySelector('.sores-list')
+const scoreboardDiv = document.querySelector('.scoreboard')
+const scoreboard = document.querySelector('.scores-list')
 
 var hasWon = false
 var interval = null
@@ -239,6 +239,9 @@ const checkForWin = () => {
 	console.log('Win!')
 	displayStopScreen()
 	stopTimer()
+
+	setCookie(inpName.value, time)
+	showBestScores()
 }
 
 const openTile = (x, y) => {
@@ -304,11 +307,54 @@ const openTiles = (cellValue) => {
 	checkForWin()
 }
 
+const getBestScores = () => {
+	var bestScores = getCookies()
+
+	if (bestScores === null) return null
+	if (bestScores.length === 1) return bestScores
+
+	const toRemove = document.querySelectorAll('ol > li')
+	toRemove.forEach((e) => e.remove())
+
+	bestScores.sort((a, b) => {
+		const aTime = parseInt(a.substring(a.indexOf(',') + 1))
+		const bTime = parseInt(b.substring(b.indexOf(',') + 1))
+
+		if (aTime > bTime) {
+			//a is slower than b
+			return 1
+		} else {
+			return -1
+		}
+	})
+
+	bestScores = bestScores.slice(0, 10)
+	return bestScores
+}
+
+const showBestScores = () => {
+	const scoresArray = getBestScores()
+
+	if (scoresArray == null) return
+	scoresArray.forEach((el) => {
+		var name = el.substring(el.indexOf('=') + 1, el.indexOf(','))
+		var time = parseInt(el.substring(el.indexOf(',') + 1, el.length))
+		console.log({ name, time })
+
+		time = new Date(time * 1000).toISOString().slice(14, 19)
+
+		const li = document.createElement('li')
+		li.textContent = `${name} - ${time}`
+
+		scoreboard.append(li)
+	})
+}
+
+//unused, not working
 const removeCookie = (id) => {
-	getCookies()
 	const delDate = new Date()
 
-	document.cookie = `${id}=${null}; ${delDate.getTime()}`
+	document.cookie = `${id}=${null}; expires=${delDate.getTime() - 1}; path=/`
 }
 
 const setCookie = (imie, czas) => {
@@ -319,17 +365,20 @@ const setCookie = (imie, czas) => {
 	const cArray = getCookies()
 	const cData = [imie, czas]
 
-	document.cookie = `${cArray.length + 1}=${cData}; 2022; path='/'`
+	var cLength = 0
+	if (cArray != null) cLength = cArray.length
+
+	document.cookie = `${cLength}=${cData}; expires=2023; path=/`
 }
 
 const getCookies = () => {
 	const cDecoded = decodeURIComponent(document.cookie)
 	const cArray = cDecoded.split('; ')
 
-	console.log(cArray)
+	if (cArray[0] == '') return null
+
 	return cArray
 }
 
-removeCookie(2)
-
 btnCreate.addEventListener('click', createMinefield)
+showBestScores()
