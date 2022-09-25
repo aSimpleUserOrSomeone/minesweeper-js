@@ -8,6 +8,8 @@ const mineFrame = document.querySelector('.minesweeper-frame')
 const mineField = document.querySelector('.minesweeper-field')
 const stopScreen = document.querySelector('.stop-screen')
 const timeP = document.querySelector('.time-counter')
+const winText = document.querySelector('.win-text')
+const loseText = document.querySelector('.lose-text')
 
 const inpName = document.querySelector('#inpName')
 const scoreboardDiv = document.querySelector('.scoreboard')
@@ -55,11 +57,11 @@ const getFromForm = () => {
 				}
 				return results
 			} else {
-				console.log('To many mines')
+				alert('To many mines')
 				return null
 			}
 		} else {
-			console.log('Not enough mines')
+			alert('Not enough mines')
 			return null
 		}
 	}
@@ -69,22 +71,29 @@ const createMinefield = () => {
 	//will hide lose screen(filter)
 	hideStopScreen()
 
+	//will hide win/lose text
+	winText.style.display = 'none'
+	loseText.style.display = 'none'
+
 	//will reset timer
 	time = 0
 	stopTimer()
 	timeP.textContent = '000'
 
-	//show minefield
-	mineField.style.display = 'flex'
-
-	//get form data
-	const formData = getFromForm()
-	if (formData == null) return
-
 	//reset playing field
 	if (document.querySelectorAll('.minesweeper-field > *')) {
 		document.querySelectorAll('.minesweeper-field > *').forEach((el) => el.remove())
 	}
+
+	//get form data
+	const formData = getFromForm()
+	if (formData == null) {
+		mineField.style.display = 'none'
+		return
+	}
+
+	//show minefield
+	mineField.style.display = 'flex'
 
 	leftoverMines = formData.minesCount
 
@@ -116,6 +125,9 @@ const createMinefield = () => {
 				},
 				{ once: true }
 			)
+			minesweeperCell.addEventListener('contextmenu', (ev) => {
+				putFlag(ev, minesweeperCell)
+			})
 			minesweeperRow.appendChild(minesweeperCell)
 		})
 		mineField.appendChild(minesweeperRow)
@@ -218,6 +230,7 @@ const mineClicked = (x, y) => {
 		showTile(x, y)
 	})
 
+	loseText.style.display = 'block'
 	displayStopScreen()
 	stopTimer()
 }
@@ -236,7 +249,7 @@ const checkForWin = () => {
 	//will go on if every non-mine cell is uncovered (meaning win)
 	if (!allGood) return
 
-	console.log('Win!')
+	winText.style.display = 'block'
 	displayStopScreen()
 	stopTimer()
 
@@ -278,6 +291,11 @@ const openTile = (x, y) => {
 }
 
 const openTiles = (cellValue) => {
+	//chack if flag clicked if so do nothing
+	const thiCell = document.querySelector(`.minesweeper-field > div:nth-child(${cellValue[1] + 1}) > div:nth-child(${cellValue[0] + 1})`)
+
+	if (thiCell.classList.contains('flag')) return
+
 	//check if mine clicked
 	if (arrMinefield[cellValue[1]][cellValue[0]][0] === 9) {
 		mineClicked(cellValue[0], cellValue[1])
@@ -339,7 +357,6 @@ const showBestScores = () => {
 	scoresArray.forEach((el) => {
 		var name = el.substring(el.indexOf('=') + 1, el.indexOf(','))
 		var time = parseInt(el.substring(el.indexOf(',') + 1, el.length))
-		console.log({ name, time })
 
 		time = new Date(time * 1000).toISOString().slice(14, 19)
 
@@ -380,5 +397,19 @@ const getCookies = () => {
 	return cArray
 }
 
+const putFlag = (ev, tile) => {
+	ev.preventDefault()
+	if (tile.classList.contains('hidden')) {
+		//is tile hidden
+		if (tile.classList.contains('flag')) {
+			tile.classList.remove('flag')
+		} else {
+			tile.classList.add('flag')
+		}
+	}
+}
+
 btnCreate.addEventListener('click', createMinefield)
 showBestScores()
+winText.style.display = 'none'
+loseText.style.display = 'none'

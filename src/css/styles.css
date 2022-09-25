@@ -50,6 +50,11 @@ main {
 }
 
 .form-row label {
+	text-shadow: none;
+	transition: text-shadow 0.5s;
+}
+.form-row label:hover {
+	text-shadow: white 0 0 3px;
 }
 
 .form-row input[type='number'] {
@@ -163,9 +168,11 @@ main {
 	color: transparent;
 }
 
-.flag {
+.flag.hidden {
 	border-color: grey;
 	background-color: #aaa;
+	background-image: url('../img/flag.png');
+	background-size: cover;
 }
 
 .mine.shown {
