@@ -18,23 +18,20 @@ const scoreboard = document.querySelector('.scores-list')
 var hasWon = false
 var interval = null
 var isTicking = false
-var time = 0
+var startTime = null
+var timeC = 0
 var leftoverMines = 0
 var arrMinefield = []
 
 const startTimer = () => {
 	if (isTicking) return
+	startTime = Date.now()
 	isTicking = true
 	interval = setInterval(() => {
-		time++
-		if (time > 99) {
-			timeP.textContent = time
-		} else if (time > 9) {
-			timeP.textContent = '0' + time
-		} else {
-			timeP.textContent = '00' + time
-		}
-	}, 1000)
+		var elapsedTime = Date.now() - startTime
+		timeC = elapsedTime / 1000
+		timeP.textContent = timeC.toFixed(1)
+	}, 100)
 }
 
 const stopTimer = () => {
@@ -251,9 +248,9 @@ const checkForWin = () => {
 
 	winText.style.display = 'block'
 	displayStopScreen()
-	stopTimer()
 
-	setCookie(inpName.value, time)
+	stopTimer()
+	setCookie(inpName.value, timeC)
 	showBestScores()
 }
 
@@ -335,8 +332,8 @@ const getBestScores = () => {
 	toRemove.forEach((e) => e.remove())
 
 	bestScores.sort((a, b) => {
-		const aTime = parseInt(a.substring(a.indexOf(',') + 1))
-		const bTime = parseInt(b.substring(b.indexOf(',') + 1))
+		const aTime = parseFloat(a.substring(a.indexOf(',') + 1))
+		const bTime = parseFloat(b.substring(b.indexOf(',') + 1))
 
 		if (aTime > bTime) {
 			//a is slower than b
@@ -356,22 +353,15 @@ const showBestScores = () => {
 	if (scoresArray == null) return
 	scoresArray.forEach((el) => {
 		var name = el.substring(el.indexOf('=') + 1, el.indexOf(','))
-		var time = parseInt(el.substring(el.indexOf(',') + 1, el.length))
+		var time = parseFloat(el.substring(el.indexOf(',') + 1, el.length))
 
-		time = new Date(time * 1000).toISOString().slice(14, 19)
+		time = new Date(time * 1000).toISOString().slice(14, 21)
 
 		const li = document.createElement('li')
 		li.textContent = `${name} - ${time}`
 
 		scoreboard.append(li)
 	})
-}
-
-//unused, not working
-const removeCookie = (id) => {
-	const delDate = new Date()
-
-	document.cookie = `${id}=${null}; expires=${delDate.getTime() - 1}; path=/`
 }
 
 const setCookie = (imie, czas) => {
