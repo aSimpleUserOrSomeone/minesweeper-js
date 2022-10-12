@@ -175,6 +175,13 @@ main {
 	background-size: cover;
 }
 
+.question.hidden {
+	border-color: grey;
+	background-color: #aaa;
+	background-image: url('../img/question-mark.png');
+	background-size: cover;
+}
+
 .mine.shown {
 	background-image: url(../img/mine.png);
 	background-size: contain;

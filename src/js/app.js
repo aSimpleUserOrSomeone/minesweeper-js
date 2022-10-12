@@ -10,6 +10,7 @@ const stopScreen = document.querySelector('.stop-screen')
 const timeP = document.querySelector('.time-counter')
 const winText = document.querySelector('.win-text')
 const loseText = document.querySelector('.lose-text')
+const flagCounter = document.querySelector('.flag-counter')
 
 const inpName = document.querySelector('#inpName')
 const scoreboardDiv = document.querySelector('.scoreboard')
@@ -22,6 +23,7 @@ var startTime = null
 var timeC = 0
 var leftoverMines = 0
 var arrMinefield = []
+var flagsLeft = 0
 
 const startTimer = () => {
 	if (isTicking) return
@@ -37,6 +39,8 @@ const startTimer = () => {
 const stopTimer = () => {
 	if (interval !== null) clearInterval(interval)
 	isTicking = false
+	var elapsedTime = Date.now() - startTime
+	timeC = elapsedTime / 1000
 }
 
 const getFromForm = () => {
@@ -88,6 +92,8 @@ const createMinefield = () => {
 		mineField.style.display = 'none'
 		return
 	}
+	flagsLeft = formData.minesCount;
+	flagCounter.textContent = `Miny: ${flagsLeft}`
 
 	//show minefield
 	mineField.style.display = 'flex'
@@ -123,7 +129,7 @@ const createMinefield = () => {
 				{ once: true }
 			)
 			minesweeperCell.addEventListener('contextmenu', (ev) => {
-				putFlag(ev, minesweeperCell)
+				rightClick(ev, minesweeperCell)
 			})
 			minesweeperRow.appendChild(minesweeperCell)
 		})
@@ -215,6 +221,43 @@ const displayStopScreen = () => {
 
 const hideStopScreen = () => {
 	stopScreen.style.display = 'none'
+}
+
+const updateFlagCounter = () => {
+	flagCounter.textContent = `Miny: ${flagsLeft}`
+}
+
+const rightClick = (ev, minesweeperCell) => {
+	ev.preventDefault()
+
+	const putFlag = (tile) => {
+		if(flagsLeft === 0) return
+		tile.classList.add('flag')
+		flagsLeft--;
+	}
+
+	const putQuestion = (tile) => {
+		tile.classList.remove('flag')
+		tile.classList.add('question')
+		flagsLeft++
+	}
+
+	const removeQuestion = (tile) => {
+		tile.classList.remove('question')
+	}
+
+	//is tile hidden
+	if(minesweeperCell.classList.contains('hidden')) {
+		if (minesweeperCell.classList.contains('flag')) {
+			putQuestion(minesweeperCell)
+		} else if(minesweeperCell.classList.contains('question')) {
+			removeQuestion(minesweeperCell)
+		} else {
+			putFlag(minesweeperCell)
+		}
+	}
+
+	updateFlagCounter()
 }
 
 const mineClicked = (x, y) => {
@@ -355,7 +398,7 @@ const showBestScores = () => {
 		var name = el.substring(el.indexOf('=') + 1, el.indexOf(','))
 		var time = parseFloat(el.substring(el.indexOf(',') + 1, el.length))
 
-		time = new Date(time * 1000).toISOString().slice(14, 21)
+		time = new Date(time * 1000).toISOString().slice(14, 23)
 
 		const li = document.createElement('li')
 		li.textContent = `${name} - ${time}`
@@ -387,17 +430,6 @@ const getCookies = () => {
 	return cArray
 }
 
-const putFlag = (ev, tile) => {
-	ev.preventDefault()
-	if (tile.classList.contains('hidden')) {
-		//is tile hidden
-		if (tile.classList.contains('flag')) {
-			tile.classList.remove('flag')
-		} else {
-			tile.classList.add('flag')
-		}
-	}
-}
 
 btnCreate.addEventListener('click', createMinefield)
 showBestScores()
