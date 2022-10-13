@@ -13,8 +13,11 @@ const loseText = document.querySelector('.lose-text')
 const flagCounter = document.querySelector('.flag-counter')
 
 const inpName = document.querySelector('#inpName')
-const scoreboardDiv = document.querySelector('.scoreboard')
-const scoreboard = document.querySelector('.scores-list')
+const scoreboardDivs = document.querySelector('.scoreboard')
+const scoreboardAll = document.querySelector('.scores-list-all')
+const scoreboardThis = document.querySelector('.scores-list-this')
+
+var cArray = []
 
 var hasWon = false
 var interval = null
@@ -27,6 +30,7 @@ var flagsLeft = 0
 
 const startTimer = () => {
 	if (isTicking) return
+	timeC = 0
 	startTime = Date.now()
 	isTicking = true
 	interval = setInterval(() => {
@@ -92,7 +96,7 @@ const createMinefield = () => {
 		mineField.style.display = 'none'
 		return
 	}
-	flagsLeft = formData.minesCount;
+	flagsLeft = formData.minesCount
 	flagCounter.textContent = `Miny: ${flagsLeft}`
 
 	//show minefield
@@ -175,7 +179,7 @@ const fillMinefield = (minesweeperCell) => {
 
 			if (x === 0) {
 				startX = 0
-			} else if (x === arrMinefield[x].length - 1) {
+			} else if (x === arrMinefield[y].length - 1) {
 				maxX = 0
 			}
 
@@ -231,9 +235,9 @@ const rightClick = (ev, minesweeperCell) => {
 	ev.preventDefault()
 
 	const putFlag = (tile) => {
-		if(flagsLeft === 0) return
+		if (flagsLeft === 0) return
 		tile.classList.add('flag')
-		flagsLeft--;
+		flagsLeft--
 	}
 
 	const putQuestion = (tile) => {
@@ -247,10 +251,10 @@ const rightClick = (ev, minesweeperCell) => {
 	}
 
 	//is tile hidden
-	if(minesweeperCell.classList.contains('hidden')) {
+	if (minesweeperCell.classList.contains('hidden')) {
 		if (minesweeperCell.classList.contains('flag')) {
 			putQuestion(minesweeperCell)
-		} else if(minesweeperCell.classList.contains('question')) {
+		} else if (minesweeperCell.classList.contains('question')) {
 			removeQuestion(minesweeperCell)
 		} else {
 			putFlag(minesweeperCell)
@@ -293,8 +297,12 @@ const checkForWin = () => {
 	displayStopScreen()
 
 	stopTimer()
-	setCookie(inpName.value, timeC)
-	showBestScores()
+
+	const gameData = getFromForm()
+	setCookie(timeC, gameData.width, gameData.height, gameData.minesCount, inpName.value)
+	getCookiesArray()
+	showBestScoresAll()
+	showBestSoresThis(gameData.width, gameData.height, gameData.minesCount)
 }
 
 const openTile = (x, y) => {
@@ -307,7 +315,7 @@ const openTile = (x, y) => {
 
 	if (x === 0) {
 		startX = 0
-	} else if (x === arrMinefield[x].length - 1) {
+	} else if (x === arrMinefield[y].length - 1) {
 		maxX = 0
 	}
 
@@ -365,73 +373,100 @@ const openTiles = (cellValue) => {
 	checkForWin()
 }
 
-const getBestScores = () => {
-	var bestScores = getCookies()
-
-	if (bestScores === null) return null
-	if (bestScores.length === 1) return bestScores
-
-	const toRemove = document.querySelectorAll('ol > li')
-	toRemove.forEach((e) => e.remove())
+const showBestScoresAll = () => {
+	if (cArray == []) return
+	const bestScores = []
+	cArray.forEach((el) => {
+		const time = parseFloat(el.split(',')[0].substring(el.indexOf('=') + 1))
+		const name = el.split(',')[1]
+		bestScores.push([time, name])
+	})
 
 	bestScores.sort((a, b) => {
-		const aTime = parseFloat(a.substring(a.indexOf(',') + 1))
-		const bTime = parseFloat(b.substring(b.indexOf(',') + 1))
-
-		if (aTime > bTime) {
-			//a is slower than b
-			return 1
-		} else {
-			return -1
-		}
+		if (a[0] > b[0]) return 1
+		else return -1
 	})
 
-	bestScores = bestScores.slice(0, 10)
-	return bestScores
-}
-
-const showBestScores = () => {
-	const scoresArray = getBestScores()
-
-	if (scoresArray == null) return
-	scoresArray.forEach((el) => {
-		var name = el.substring(el.indexOf('=') + 1, el.indexOf(','))
-		var time = parseFloat(el.substring(el.indexOf(',') + 1, el.length))
-
-		time = new Date(time * 1000).toISOString().slice(14, 23)
-
+	scoreboardAll.innerHTML = ''
+	bestScores.slice(0, 10)
+	bestScores.forEach((el) => {
 		const li = document.createElement('li')
-		li.textContent = `${name} - ${time}`
+		li.textContent = `${el[0]} - ${el[1]}`
+		scoreboardAll.appendChild(li)
+	})
+}
+const showBestSoresThis = (width = 0, height = 0, mines = 0) => {
+	if (cArray == []) return
+	var bestScores = []
+	cArray.forEach((el) => {
+		const time = parseFloat(el.split(',')[0].substring(el.indexOf('=') + 1))
+		const name = el.split(',')[1]
+		const cWidth = parseFloat(el.split(',')[2])
+		const cHeight = parseFloat(el.split(',')[3])
+		const cMines = parseFloat(el.split(',')[4])
+		bestScores.push([time, name, cWidth, cHeight, cMines])
+	})
 
-		scoreboard.append(li)
+	bestScores = bestScores.filter((el) => {
+		if (el[2] != width) return false
+		if (el[3] != height) return false
+		if (el[4] != mines) return false
+		return true
+	})
+
+	bestScores.sort((a, b) => {
+		if (a[0] > b[0]) return 1
+		else return -1
+	})
+
+	scoreboardThis.innerHTML = ''
+	bestScores.slice(0, 10)
+	bestScores.forEach((el) => {
+		const li = document.createElement('li')
+		li.textContent = `${el[0]} - ${el[1]} (${width}/${height}/${mines})`
+		scoreboardThis.appendChild(li)
 	})
 }
 
-const setCookie = (imie, czas) => {
-	const date = new Date()
-	date.setTime(date.getTime + 24 * 1000000)
-	if (imie == '') imie = 'Anon'
-
-	const cArray = getCookies()
-	const cData = [imie, czas]
-
-	var cLength = 0
-	if (cArray != null) cLength = cArray.length
-
-	document.cookie = `${cLength}=${cData}; expires=2023; path=/`
-}
-
-const getCookies = () => {
+const getCookiesArray = () => {
 	const cDecoded = decodeURIComponent(document.cookie)
-	const cArray = cDecoded.split('; ')
-
-	if (cArray[0] == '') return null
-
-	return cArray
+	cArray = cDecoded.split('; ')
 }
 
+const setCookie = (time, width, height, mines, name) => {
+	if (name == '') name = 'Anon'
+	var cKey = 0
+	if (cArray.length != 0) {
+		cKey = cArray.length
+	}
+
+	const cData = [time, name, width, height, mines]
+	document.cookie = `${cKey}=${cData}; expires=2023; path=/`
+}
 
 btnCreate.addEventListener('click', createMinefield)
-showBestScores()
+getCookiesArray()
+showBestScoresAll()
+const gameData = getFromForm()
+showBestSoresThis(gameData.width, gameData.height, gameData.minesCount)
 winText.style.display = 'none'
 loseText.style.display = 'none'
+
+inpWidth.addEventListener('change', () => {
+	const gameData = getFromForm()
+	if (gameData != undefined) {
+		showBestSoresThis(gameData.width, gameData.height, gameData.minesCount)
+	}
+})
+inpHeight.addEventListener('change', () => {
+	const gameData = getFromForm()
+	if (gameData != undefined) {
+		showBestSoresThis(gameData.width, gameData.height, gameData.minesCount)
+	}
+})
+inpMines.addEventListener('change', () => {
+	const gameData = getFromForm()
+	if (gameData != undefined) {
+		showBestSoresThis(gameData.width, gameData.height, gameData.minesCount)
+	}
+})

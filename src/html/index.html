@@ -13,15 +13,15 @@
 			<form id="inpForm" onsubmit="event.preventDefault()">
 				<div class="form-row">
 					<label for="inpWidth">Width:</label>
-					<input type="number" name="width" id="inpWidth" value="7" />
+					<input type="number" name="width" id="inpWidth" value="5" />
 				</div>
 				<div class="form-row">
 					<label for="inpHeight">Height:</label>
-					<input type="number" name="height" id="inpHeight" value="7" />
+					<input type="number" name="height" id="inpHeight" value="4" />
 				</div>
 				<div class="form-row">
 					<label for="inpMines">Mines:</label>
-					<input type="number" name="mines" id="inpMines" value="4" />
+					<input type="number" name="mines" id="inpMines" value="2" />
 				</div>
 				<div class="form-row">
 					<label for="inpName">Name:</label>
@@ -38,15 +38,19 @@
 					<p class="time-counter">000</p>
 				</div>
 				<div class="minesweeper-field"></div>
-				<p class="flag-counter">Miny: 0</p> 
+				<p class="flag-counter">Miny: 0</p>
 				<h2 class="win-text" style="display: none">Congrats!</h2>
 				<h2 class="lose-text" style="display: none">You lost!</h2>
 				<div class="stop-screen"></div>
 			</div>
 
 			<div class="scoreboard">
-				<h2>Best scores:</h2>
-				<ol class="scores-list"></ol>
+				<h2>Best scores (all modes):</h2>
+				<ol class="scores-list-all"></ol>
+			</div>
+			<div class="scoreboard">
+				<h2>Best scores (wid/hei/mines):</h2>
+				<ol class="scores-list-this"></ol>
 			</div>
 		</main>
 	</body>

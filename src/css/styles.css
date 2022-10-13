@@ -7,7 +7,7 @@
 }
 
 body {
-	width: 100%;
+	width: 100vw;
 	height: 100%;
 }
 
@@ -23,7 +23,7 @@ body {
 
 main {
 	width: 100vw;
-	height: 100vh;
+	min-height: 100vh;
 	padding: 100px;
 
 	display: flex;
@@ -264,4 +264,10 @@ main {
 	text-indent: initial;
 	white-space: initial;
 	overflow: initial;
+}
+
+.scoreboard {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
