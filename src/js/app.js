@@ -374,7 +374,7 @@ const openTiles = (cellValue) => {
 }
 
 const showBestScoresAll = () => {
-	if (cArray == []) return
+	if (cArray[0] == '') return
 	const bestScores = []
 	cArray.forEach((el) => {
 		const time = parseFloat(el.split(',')[0].substring(el.indexOf('=') + 1))
@@ -436,7 +436,7 @@ const getCookiesArray = () => {
 const setCookie = (time, width, height, mines, name) => {
 	if (name == '') name = 'Anon'
 	var cKey = 0
-	if (cArray.length != 0) {
+	if (cArray[0] != '') {
 		cKey = cArray.length
 	}
 
